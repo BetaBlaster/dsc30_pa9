@@ -253,7 +253,17 @@ public class HCTree {
      * @throws IOException
      */
     public void encode(byte symbol, BitOutputStream out) throws IOException {
-        /* TODO */
+        HCNode currNode = leaves[symbol];
+        HCNode parNode = currNode.getParent();
+        while (parNode != null) {
+            if (currNode.equals(parNode.getC0())) out.writeBit(0);
+            else if (currNode.equals(parNode.getC1())) out.writeBit(1);
+
+            currNode = parNode;
+            parNode = currNode.getParent();
+        }
+
+
     }
 
     /**
