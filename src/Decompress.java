@@ -40,14 +40,14 @@ public class Decompress {
         huffman.decodeHCTree(bitIn);
 
         // decode the file and write the results
-        for (int i = 0; i < byteCount; i++)
-            huffman.decode(bitIn);
+        for (int i = 0; i < byteCount + 1; i++)
+            out.writeByte(huffman.decode(bitIn));
         /* END OF TODO */
 
         inFile.close();
         in.close();
         outFile.close();
         out.close();
-        return;
+         return;
     }
 }
