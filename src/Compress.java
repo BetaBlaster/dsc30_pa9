@@ -24,8 +24,8 @@ public class Compress {
 
         // Check if the number of arguments is correct
         if (args.length != EXP_ARG) {
-            System.out.println("Invalid number of arguments.\n" + 
-            "Usage: ./compress <infile outfile>.\n");
+            System.out.println("Invalid number of arguments.\n"
+                + "Usage: ./compress <infile outfile>.\n");
             return;
         }
 

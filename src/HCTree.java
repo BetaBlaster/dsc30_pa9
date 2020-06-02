@@ -141,7 +141,8 @@ public class HCTree {
          * @return if it's leaf, return true. Otherwise, return false.
          */
         boolean isLeaf() {
-            if (c0 == null && c1 == null ) return true;
+            if (c0 == null && c1 == null)
+                return true;
             return false;
         }
 
@@ -194,9 +195,10 @@ public class HCTree {
     }
 
     /**
-     * TODO
+     * build a Huffman Coding Tree based off of frequency of symbols
      *
-     * @param freq
+     * @param freq int array where index is the ascii value of characters and value is frequency
+     *             character appears in the to-be compressed file
      */
     public void buildTree(int[] freq) {
         PriorityQueue<HCNode> priority = new PriorityQueue<>();
@@ -220,7 +222,7 @@ public class HCTree {
             tempC0 = priority.poll();
             tempC1 = priority.poll();
 
-            tempParent = new HCNode(tempC0.getSymbol(), tempC0.getFreq() +tempC1.getFreq());
+            tempParent = new HCNode(tempC0.getSymbol(), tempC0.getFreq() + tempC1.getFreq());
 
             tempC0.setParent(tempParent);
             tempC1.setParent(tempParent);
@@ -235,10 +237,10 @@ public class HCTree {
     }
 
     /**
-     * TODO
+     * encode a given symbol with the HCTree built
      *
-     * @param symbol
-     * @param out
+     * @param symbol value being encoded
+     * @param out where bits will be written
      * @throws IOException
      */
     public void encode(byte symbol, BitOutputStream out) throws IOException {
@@ -260,10 +262,10 @@ public class HCTree {
     }
 
     /**
-     * TODO
+     * read input to decode a single symbol with the HCTree built
      *
-     * @param in
-     * @return
+     * @param in where bits will be read
+     * @return btye representation of decoded symbol
      * @throws IOException
      */
     public byte decode(BitInputStream in) throws IOException {
@@ -281,10 +283,10 @@ public class HCTree {
     }
 
     /**
-     * A recursive pre-order traversing to output the structure of the HCTree in bits
+     * A recursive pre-order traversing to encode HCTree in header
      *
-     * @param node current node being visited
-     * @param out
+     * @param node current node being encoded
+     * @param out where bits will be written
      * @throws IOException
      */
     public void encodeHCTree(HCNode node, BitOutputStream out) throws IOException {
@@ -301,10 +303,10 @@ public class HCTree {
 
 
     /**
-     * TODO
+     * recursively build the original HCTree from the header of encoded file
      *
-     * @param in
-     * @return
+     * @param in where bits will be read
+     * @return leaf node in base case, branch node otherwise
      * @throws IOException
      */
     public HCNode decodeHCTree(BitInputStream in) throws IOException {

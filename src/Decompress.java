@@ -18,8 +18,8 @@ public class Decompress {
 
         // Check if the number of arguments is correct
         if (args.length != EXP_ARG) {
-            System.out.println("Invalid number of arguments.\n" + 
-            "Usage: ./decompress <infile outfile>.\n");
+            System.out.println("Invalid number of arguments.\n"
+                + "Usage: ./decompress <infile outfile>.\n");
             return;
         }
 
@@ -29,8 +29,6 @@ public class Decompress {
 
         FileOutputStream outFile = new FileOutputStream(args[1]);
         DataOutputStream out = new DataOutputStream(outFile);
-
-        /* START OF TODO */
 
         // read the number of byte from the file
         int byteCount = in.readInt();
@@ -42,12 +40,11 @@ public class Decompress {
         // decode the file and write the results
         for (int i = 0; i < byteCount; i++)
             out.writeByte(huffman.decode(bitIn));
-        /* END OF TODO */
 
         inFile.close();
         in.close();
         outFile.close();
         out.close();
-         return;
+        return;
     }
 }
