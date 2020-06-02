@@ -1,6 +1,6 @@
 /*
- * Name: TODO
- * PID: TODO
+ * Name: Andrew Mokhtarzadeh
+ * PID: A15557088
  */
 
 import java.io.DataOutputStream;
@@ -12,12 +12,13 @@ import java.nio.file.Paths;
 /**
  * Compress the first given file to the second given file using Huffman coding
  * 
- * @author TODO
- * @since TODO
+ * @author Andrew Mokhtarzadeh
+ * @since 06/02/20
  */
 public class Compress {
 
     private static final int EXP_ARG = 2; // number of expected arguments
+    private static final int NUM_CHARS = 256;
 
     public static void main(String[] args) throws IOException {
 
@@ -35,15 +36,21 @@ public class Compress {
         DataOutputStream out = new DataOutputStream(file);
         BitOutputStream bitOut = new BitOutputStream(out);
 
-        /* START OF TODO */
-
         // construct HCTree from the file
+        int[] freq = new int[NUM_CHARS];
+        for (byte b: input)
+            freq[b & 0xff]++;
+        HCTree huffman = new HCTree();
+        huffman.buildTree(freq);
 
         // write number of bytes to out file
+        out.writeInt(input.length);
 
         // encode HCTree and every byte
+        huffman.encodeHCTree(huffman.getRoot(), bitOut);
+        for (byte b: input)
+            huffman.encode(b, bitOut);
 
-        /* END OF TODO */
 
         // There might be several padding bits in the bitOut that we haven't written, so
         // flush it first.

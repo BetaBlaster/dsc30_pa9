@@ -10,11 +10,14 @@ import java.util.PriorityQueue;
 
 /**
  * The Huffman Coding Tree
+ *
+ * @author Andrew Mokhtarzadeh
+ * @since 06/02/20
  */
 public class HCTree {
     // alphabet size of extended ASCII
     private static final int NUM_CHARS = 256;
-    // number of bits in a bytef
+    // number of bits in a byte
     private static final int BYTE_BITS = 8;
 
     // the root of HCTree
@@ -231,20 +234,6 @@ public class HCTree {
         }
     }
 
-    /*
-    public static void main(String[] args) {
-        HCTree tree = new HCTree();
-        int[] f = {5,0,3,22,3,67,8,2,1};
-        PriorityQueue<HCNode> p = tree.buildTree(f);
-
-        while (!p.isEmpty()) {
-            HCNode t = p.poll();
-            System.out.println(t.getSymbol() + ": " + t.getFreq());
-        }
-    }
-
-     */
-
     /**
      * TODO
      *
@@ -253,7 +242,8 @@ public class HCTree {
      * @throws IOException
      */
     public void encode(byte symbol, BitOutputStream out) throws IOException {
-        HCNode currNode = leaves[symbol];
+        int ascii = symbol & 0xff;
+        HCNode currNode = leaves[ascii];
         HCNode parNode = currNode.getParent();
         while (parNode != null) {
             if (currNode.equals(parNode.getC0())) out.writeBit(0);
@@ -275,27 +265,37 @@ public class HCTree {
      */
     public byte decode(BitInputStream in) throws IOException {
         HCNode currNode = this.root;
-        boolean flag = true;
         int currBit;
-        while (currNode.getC0() != null || currNode.getC1() != null) {
+        while (!currNode.isLeaf()) {
             currBit = in.readBit();
-            if (currBit == 0) currNode.getC0();
-            else if (currBit == 1) currNode.getC1();
+            if (currBit == 0)
+                currNode = currNode.getC0();
+            else if (currBit == 1)
+                currNode = currNode.getC1();
         }
 
         return currNode.getSymbol();
     }
 
     /**
-     * TODO
+     * A recursive pre-order traversing to output the structure of the HCTree in bits
      *
-     * @param node
+     * @param node current node being visited
      * @param out
      * @throws IOException
      */
     public void encodeHCTree(HCNode node, BitOutputStream out) throws IOException {
-        /* TODO */
+        if (node == null) return;
+        if (node.isLeaf()) {
+            out.writeBit(1);
+            out.writeByte(node.getSymbol());
+        } else {
+            out.writeBit(0);
+        }
+        encodeHCTree(node.getC0(), out);
+        encodeHCTree(node.getC1(), out);
     }
+
 
     /**
      * TODO
@@ -305,7 +305,28 @@ public class HCTree {
      * @throws IOException
      */
     public HCNode decodeHCTree(BitInputStream in) throws IOException {
-        /* TODO */
+        int currentBit = in.readBit();
+        if (currentBit == 1) { // Leaf Node (Base Case)
+            return new HCNode(in.readByte(), 0);
+        }
+        if (currentBit == 0) { // Not Leaf Node
+            HCNode left = decodeHCTree(in);
+            HCNode right = decodeHCTree(in);
+            leaves[left.getSymbol() & 0xff] = left;
+            leaves[right.getSymbol() & 0xff] = right;
+
+
+            HCNode parent = new HCNode(left.getSymbol(), 0);
+            parent.setC0(left);
+            parent.setC1(right);
+
+            left.setParent(parent);
+            right.setParent(parent);
+
+            setRoot(parent);
+            return parent;
+        }
+
         return null;
     }
 

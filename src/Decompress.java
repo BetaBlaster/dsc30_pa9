@@ -1,15 +1,15 @@
 /*
- * Name: TODO
- * PID: TODO
+ * Name: Andrew Mokhtarzadeh
+ * PID: A15557088
  */
 
 import java.io.*;
 
 /**
  * Decompress the first given file to the second given file using Huffman coding
- * 
- * @author TODO
- * @since TODO
+ *
+ * @author Andrew Mokhtarzadeh
+ * @since 06/02/20
  */
 public class Decompress {
     private static final int EXP_ARG = 2; // number of expected arguments
@@ -33,11 +33,15 @@ public class Decompress {
         /* START OF TODO */
 
         // read the number of byte from the file
+        int byteCount = in.readInt();
 
         // decode and build the tree from the "header"
+        HCTree huffman = new HCTree();
+        huffman.decodeHCTree(bitIn);
 
         // decode the file and write the results
-
+        for (int i = 0; i < byteCount; i++)
+            huffman.decode(bitIn);
         /* END OF TODO */
 
         inFile.close();
