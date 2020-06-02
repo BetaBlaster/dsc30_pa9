@@ -245,13 +245,16 @@ public class HCTree {
         int ascii = symbol & 0xff;
         HCNode currNode = leaves[ascii];
         HCNode parNode = currNode.getParent();
+        Stack<Integer> stack = new Stack<>();
         while (parNode != null) {
-            if (currNode.equals(parNode.getC0())) out.writeBit(0);
-            else if (currNode.equals(parNode.getC1())) out.writeBit(1);
+            if (currNode.equals(parNode.getC0())) stack.push(0);
+            else if (currNode.equals(parNode.getC1())) stack.push(1);
 
             currNode = parNode;
             parNode = currNode.getParent();
         }
+        while (!stack.isEmpty())
+            out.writeBit(stack.pop());
 
 
     }
