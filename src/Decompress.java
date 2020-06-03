@@ -31,20 +31,25 @@ public class Decompress {
         DataOutputStream out = new DataOutputStream(outFile);
 
         // read the number of byte from the file
-        int byteCount = in.readInt();
+        try {
+            int byteCount = in.readInt();
 
-        // decode and build the tree from the "header"
-        HCTree huffman = new HCTree();
-        huffman.decodeHCTree(bitIn);
+            // decode and build the tree from the "header"
+            HCTree huffman = new HCTree();
+            huffman.decodeHCTree(bitIn);
 
-        // decode the file and write the results
-        for (int i = 0; i < byteCount; i++)
-            out.writeByte(huffman.decode(bitIn));
+            // decode the file and write the results
+            for (int i = 0; i < byteCount; i++)
+                out.writeByte(huffman.decode(bitIn));
 
-        inFile.close();
-        in.close();
-        outFile.close();
-        out.close();
-        return;
+            inFile.close();
+            in.close();
+            outFile.close();
+            out.close();
+            return;
+        } catch (IOException e) {
+            return;
+        }
+
     }
 }

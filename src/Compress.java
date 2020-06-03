@@ -36,6 +36,8 @@ public class Compress {
         DataOutputStream out = new DataOutputStream(file);
         BitOutputStream bitOut = new BitOutputStream(out);
 
+        if (input.length == 0) return;
+
         // construct HCTree from the file
         int[] freq = new int[NUM_CHARS];
         for (byte b: input)

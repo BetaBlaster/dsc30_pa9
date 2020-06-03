@@ -215,24 +215,33 @@ public class HCTree {
                 leaves[i] = currNode;
             }
         }
-
         // building HCTree
-        HCNode tempC0, tempC1, tempParent;
-        while (!priority.isEmpty()) {
-            tempC0 = priority.poll();
-            tempC1 = priority.poll();
+        if (priority.size() == 1) {
+            HCNode tempC = priority.poll();
+            HCNode tempRoot = new HCNode(tempC.getSymbol(), tempC.getFreq());
+            this.root = tempRoot;
+            tempRoot.setC0(tempC);
+            tempRoot.setC1(tempC);
+            tempC.setParent(tempRoot);
 
-            tempParent = new HCNode(tempC0.getSymbol(), tempC0.getFreq() + tempC1.getFreq());
+        } else{
+            HCNode tempC0, tempC1, tempParent;
+            while (!priority.isEmpty()) {
+                tempC0 = priority.poll();
+                tempC1 = priority.poll();
 
-            tempC0.setParent(tempParent);
-            tempC1.setParent(tempParent);
-            tempParent.setC0(tempC0);
-            tempParent.setC1(tempC1);
+                tempParent = new HCNode(tempC0.getSymbol(), tempC0.getFreq() + tempC1.getFreq());
 
-            if (priority.isEmpty())
-                this.root = tempParent;
-            else
-                priority.add(tempParent);
+                tempC0.setParent(tempParent);
+                tempC1.setParent(tempParent);
+                tempParent.setC0(tempC0);
+                tempParent.setC1(tempC1);
+
+                if (priority.isEmpty())
+                    this.root = tempParent;
+                else
+                    priority.add(tempParent);
+            }
         }
     }
 
